@@ -36,13 +36,14 @@ namespace WpfApp1
 
         private void makeStdPlanes()
         {
-            int start = 2;
+            int start = 0;
             int pre = 4;
             stdPlane = vector.MakeParallelXZ(start);
             stdPlanes.Clear();
-            for (int i = 5; i > -6; i--)
+            for (int i = 1; i < 6; i++)
             {
-                stdPlanes.Add(vector.MakeParallePlaneByOtherPlane(stdPlane, start + i * pre));
+                stdPlanes.Add( vector.MakeParallePlaneByOtherPlane(stdPlane, start + i * pre));
+                stdPlanes.Add(vector.MakeParallePlaneByOtherPlane(stdPlane, start - i * pre));
             }
         }
 
@@ -73,14 +74,55 @@ namespace WpfApp1
 
             makeStdPlanes();
             DrawLinesXY();
-           
+
+            hd1.setZB("-y", "-z","p2.png");
+            hd2.setZB("-y", "z", "p2.png");
+            hd3.setZB("y", "-z", "p2.png");
+            hd4.setZB("z", "y", "p2.png");
+            hd5.setZB("-z", "-y", "p2.png");
+            hd6.setZB("z", "-y", "p2.png");
+            hd7.setZB("-z", "y", "p2.png");
+
+            hd21.setZB("-z", "-x", "p3.png");
+            hd22.setZB("z", "x", "p3.png");
+            hd23.setZB("z", "-x", "p3.png");
+            hd24.setZB("x", "z", "p3.png");
+            hd25.setZB("-x", "-z", "p3.png");
+            hd26.setZB("x", "-z", "p3.png");
+            hd27.setZB("-x", "z", "p3.png");
 
 
             // resetlines();
 
 
             //var d = Vector4.Distance(new Vector4(plane.Normal.X, plane.Normal.Y, plane.Normal.Z, plane.D),
-            
+            //    new Vector4(plane2.Normal.X, plane2.Normal.Y, plane2.Normal.Z, plane2.D));
+            ////TxShow.Text = $"place:D = {plane.D},Normal:{plane.Normal};place2:D = {plane2.D},Normal:{plane2.Normal};d = {d}";
+            //var planexy = vector.MakeXY();
+            //var planexz = vector.MakeXZ();
+            //var vector4XY = new Vector4(planexy.Normal.X, planexy.Normal.Y, planexy.Normal.Z, planexy.D);
+            //var vector4XZ = new Vector4(1, 0, 1, 0);
+            //var vector4YZ = new Vector4(0, 1, 1, 0);
+            ////TxShow.Text = $"{plane.Normal.X } * x + {plane.Normal.Y } * y + {plane.Normal.Z } * z + {plane.D} = 0 ";
+            ////TxShow_Copy.Text = $"{vector4XY.X } * x + {vector4XY.Y } * y + {vector4XY.Z } * z  + {vector4XY.W} = 0 ";
+            // Vector3 point = new Vector3(0, 0, 0);
+            ////var rls = vector.CheckHasLine(planexy, plane, out Vector3 vector3, ref point);
+            ////if (rls)
+            ////{
+            ////    TxShow_Copy.Text = $" {vector3.X } * x + {vector3.Y } * y + {vector3.Z } = 0 ";
+            ////    TxShow_Copy1.Text = $"( {point.X } ,{point.Y }, {point.Z }) ";
+            ////}
+            ////旋转
+            ////y,x,z
+            //var ag = (float)Math.PI / 180F * 45F;
+            //var qu = Quaternion.CreateFromYawPitchRoll(ag, ag, ag);
+            //var newp = Plane.Transform(plane, qu);
+            //var rls = vector.CheckHasLine(newp, planexz, out Vector3 vector3, ref point);
+            //if (rls)
+            //{
+            //    TxShow_Copy.Text = $" {vector3.X } * x + {vector3.Y } * y + {vector3.Z } = 0 ";
+            //    TxShow_Copy1.Text = $"( {point.X } ,{point.Y }, {point.Z }) ";
+            //}
         }
         private void resetLines()
         {
@@ -105,7 +147,20 @@ namespace WpfApp1
                 Canvas3.Children.Remove(uIElements3[0]);
                 uIElements3.Remove(uIElements3[0]);
             }
-           
+            hd1.Clear();
+            hd2.Clear();
+            hd3.Clear();
+            hd4.Clear();
+            hd5.Clear();
+            hd6.Clear();
+            hd7.Clear();
+            hd21.Clear();
+            hd22.Clear();
+            hd23.Clear();
+            hd24.Clear();
+            hd25.Clear();
+            hd26.Clear();
+            hd27.Clear();
         }
         private void reDrawPlanes()
         {
@@ -131,7 +186,19 @@ namespace WpfApp1
                 uIElements2.Add(e3);
                 uIElements2.Add(e4);
                 //hd1.setZB("-y", "-z", "p2.png");
-                
+                hd1.Draw(-ez1, -ey1, -ez2, -ey2, -fz1, -fy1, -fz2, -fy2);
+                //hd2.setZB("-y", "z", "p2.png");
+                hd2.Draw(ez1, -ey1, ez2, -ey2, fz1, -fy1, fz2, -fy2);
+                //hd3.setZB("y", "-z", "p2.png");
+                hd3.Draw(-ez1, ey1, -ez2, ey2, -fz1, fy1, -fz2, fy2);
+                //hd4.setZB("z", "y", "p2.png");
+                hd4.Draw(ey1, ez1, ey2, ez2, fy1, fz1, fy2, fz2);
+                //hd5.setZB("-z", "-y", "p2.png");
+                hd5.Draw(-ey1, -ez1, -ey2, -ez2, -fy1, -fz1, -fy2, -fz2);
+                //hd6.setZB("z", "-y", "p2.png");
+                hd6.Draw(-ey1, ez1, -ey2, ez2, -fy1, fz1, -fy2, fz2);
+                //hd7.setZB("-z", "y", "p2.png");
+                hd7.Draw(ey1, -ez1, ey2, -ez2, fy1, -fz1, fy2, -fz2);
             }
             var e5 = drawPlaneCrossZX(plane, ref ez1, ref ex1, ref ez2, ref ex2);
             var e6 = drawPlaneCrossZX(plane2, ref fz1, ref fx1, ref fz2, ref fx2);
@@ -141,7 +208,19 @@ namespace WpfApp1
                 uIElements3.Add(e5);
                 uIElements3.Add(e6);
                 //hd21.setZB("-z", "-x", "p3.png");
-             
+                hd21.Draw(-ex1, -ez1, -ex2, -ez2, -fx1, -fz1, -fx2, -fz2);
+                //hd22.setZB("z", "x", "p3.png");
+                hd22.Draw(ex1, ez1, ex2, ez2, fx1, fz1, fx2, fz2);
+                //hd23.setZB("z", "-x", "p3.png");
+                hd23.Draw(-ex1, ez1, -ex2, ez2, -fx1, fz1, -fx2, fz2);
+                //hd24.setZB("x", "z", "p3.png");
+                hd24.Draw(ez1, ex1, ez2, ex2, fz1, fx1, fz2, fx2);
+                //hd25.setZB("-x", "-z", "p3.png");
+                hd25.Draw(-ez1, -ex1, -ez2, -ex2, -fz1, -fx1, -fz2, -fx2);
+                //hd26.setZB("x", "-z", "p3.png");
+                hd26.Draw(-ez1, ex1, -ez2, ex2, -fz1, fx1, -fz2, fx2);
+                //hd27.setZB("-x", "z", "p3.png");
+                hd27.Draw(ez1, -ex1, ez2, -ex2, fz1, -fx1, fz2, -fx2);
             }
         }
 
@@ -448,7 +527,20 @@ namespace WpfApp1
         private void ck_Click(object sender, RoutedEventArgs e)
         {
 
-           
+            hd1.showimg(ck.IsChecked.Value);
+            hd2.showimg(ck.IsChecked.Value);
+            hd3.showimg(ck.IsChecked.Value);
+            hd4.showimg(ck.IsChecked.Value);
+            hd5.showimg(ck.IsChecked.Value);
+            hd6.showimg(ck.IsChecked.Value);
+            hd7.showimg(ck.IsChecked.Value);
+            hd21.showimg(ck.IsChecked.Value);
+            hd22.showimg(ck.IsChecked.Value);
+            hd23.showimg(ck.IsChecked.Value);
+            hd24.showimg(ck.IsChecked.Value);
+            hd25.showimg(ck.IsChecked.Value);
+            hd26.showimg(ck.IsChecked.Value);
+            hd27.showimg(ck.IsChecked.Value);
 
         }
     }

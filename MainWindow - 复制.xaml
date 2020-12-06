@@ -14,13 +14,13 @@
         <TextBlock x:Name="TxShow_Copy" HorizontalAlignment="Left" Margin="59,39,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
         <TextBlock x:Name="TxShow_Copy1" HorizontalAlignment="Left" Margin="59,65,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
         <Canvas x:Name="Canvas1" HorizontalAlignment="Left" 
-                Height="335" Margin="171,43,0,0" VerticalAlignment="Top" Width="335">
+                Height="200" Margin="171,43,0,0" VerticalAlignment="Top" Width="200">
             <Canvas.Background>
                 <ImageBrush ImageSource="p1.png"/>
             </Canvas.Background>
         </Canvas>
         <Canvas x:Name="Canvas2" HorizontalAlignment="Left" 
-            Height="200" Margin="600,46,0,0" VerticalAlignment="Top" Width="200" RenderTransformOrigin="0.866,-0.505">
+            Height="200" Margin="498,43,0,0" VerticalAlignment="Top" Width="200" RenderTransformOrigin="0.866,-0.505">
             <Canvas.Background>
                 <ImageBrush ImageSource="p2.png"/>
             </Canvas.Background>
@@ -32,20 +32,21 @@
             </Canvas.Background>
         </Canvas>
         <StackPanel HorizontalAlignment="Left" Height="6993" Margin="1245,-6947,-44832,0" VerticalAlignment="Top" Width="45097"/>
-        <Button Content="&lt;绕Z轴旋转 1°" HorizontalAlignment="Left" Margin="225,15,0,0" VerticalAlignment="Top" Width="103" RenderTransformOrigin="-0.427,-0.526" Click="Button_Click"/>
-        <Button Content="&gt; 绕Z轴旋转 1°" HorizontalAlignment="Left" Margin="354,15,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="-0.427,-0.526" Click="Button_Click_1"/>
-        <Button Content="&gt; 绕X轴旋转 1°" HorizontalAlignment="Left" Margin="603,15,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.427,-0.526" Click="Button_Click_5"/>
+        <Button Content="&lt;绕Z轴旋转 1°" HorizontalAlignment="Left" Margin="153,15,0,0" VerticalAlignment="Top" Width="103" RenderTransformOrigin="-0.427,-0.526" Click="Button_Click"/>
+        <Button Content="&gt; 绕Z轴旋转 1°" HorizontalAlignment="Left" Margin="282,15,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="-0.427,-0.526" Click="Button_Click_1"/>
+        <Button Content="&gt; 绕X轴旋转 1°" HorizontalAlignment="Left" Margin="489,16,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.427,-0.526" Click="Button_Click_5"/>
         <Button Content="&lt;绕Y轴旋转 1°" HorizontalAlignment="Right" Margin="0,21,433,0" VerticalAlignment="Top" Width="76" RenderTransformOrigin="-0.427,-0.526" Click="Button_Click_6"/>
         <Button Content="&gt; 绕Y轴旋转 1°" HorizontalAlignment="Left" Margin="1130,20,0,0" VerticalAlignment="Top" Width="74" RenderTransformOrigin="-0.427,-0.526" Click="Button_Click_7"/>
-        <TextBlock HorizontalAlignment="Left" Margin="310,49,0,0" TextWrapping="Wrap" Text="Y" VerticalAlignment="Top" Foreground="#FFF30303"/>
-        <TextBlock HorizontalAlignment="Left" Margin="511,183,0,0" TextWrapping="Wrap" Text="X" VerticalAlignment="Top" Foreground="#FFE40909"/>
+        <TextBlock HorizontalAlignment="Left" Margin="265,49,0,0" TextWrapping="Wrap" Text="Y" VerticalAlignment="Top" Foreground="#FFF30303"/>
+        <TextBlock HorizontalAlignment="Left" Margin="354,122,0,0" TextWrapping="Wrap" Text="X" VerticalAlignment="Top" Foreground="#FFE40909"/>
         <TextBlock HorizontalAlignment="Left" Margin="594,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FFE41212"><Run Text="y"/><LineBreak/><Run/></TextBlock>
         <TextBlock HorizontalAlignment="Left" Margin="1301,133,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FFEE1515"><Run Text="X"/><LineBreak/><Run/></TextBlock>
         <Button Content="清空线条" HorizontalAlignment="Left" Margin="23,109,0,0" VerticalAlignment="Top" Width="103" RenderTransformOrigin="-0.427,-0.526" Click="Button_Click_2"/>
         <Button Content="重置线条" HorizontalAlignment="Left" Margin="23,150,0,0" VerticalAlignment="Top" Width="103" RenderTransformOrigin="-0.427,-0.526" Click="Button_Click_3"/>
         <TextBlock HorizontalAlignment="Left" Margin="1223,49,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="-z" Foreground="#FFEA1212"/>
         <TextBlock HorizontalAlignment="Left" Margin="680,133,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="z" Foreground="#FFDA0B0B"/>
-        <Button Content="&lt;绕X轴旋转 1°" HorizontalAlignment="Left" Margin="728,15,0,0" VerticalAlignment="Top" Width="84" RenderTransformOrigin="-0.427,-0.526" Click="Button_Click_4" Height="18"/>
+        <Button Content="&lt;绕X轴旋转 1°" HorizontalAlignment="Left" Margin="614,16,0,0" VerticalAlignment="Top" Width="84" RenderTransformOrigin="-0.427,-0.526" Click="Button_Click_4" Height="18"/>
+        <CheckBox Content="下方坐标系显示图片" x:Name="ck" IsChecked="False" HorizontalAlignment="Left" Margin="844,228,0,0" VerticalAlignment="Top"  Click="ck_Click"/>
 
     </Grid>
 </Window>
