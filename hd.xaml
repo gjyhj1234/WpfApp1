@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="WpfApp1.hd"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfApp1"
+             mc:Ignorable="d" 
+             d:DesignHeight="333.117" d:DesignWidth="375.714" Width="200" Height="200" Loaded="UserControl_Loaded">
+    <Grid Background="Black">
+        <Canvas x:Name="Canvas1" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="200" Height="200"/>
+        <Label x:Name="lb1" Content="Label" HorizontalAlignment="Left" Margin="82,8,0,0" VerticalAlignment="Top" Foreground="#FFF31212"/>
+        <Label x:Name="lb2" Content="Label" HorizontalAlignment="Left" Margin="160,74,0,0" VerticalAlignment="Top" Foreground="#FFF31212"/>
+
+    </Grid>
+</UserControl>
