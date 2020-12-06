@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="924" Width="1740.033" Loaded="Window_Loaded">
+        Title="MainWindow" Height="924" Width="1740.033" Loaded="Window_Loaded" MouseLeftButtonUp="Window_MouseLeftButtonUp">
     <Grid Margin="0,0,0,-4">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -14,7 +14,7 @@
         <TextBlock x:Name="TxShow_Copy" HorizontalAlignment="Left" Margin="59,39,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
         <TextBlock x:Name="TxShow_Copy1" HorizontalAlignment="Left" Margin="59,65,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
         <Canvas x:Name="Canvas1" HorizontalAlignment="Left" 
-                Height="335" Margin="171,43,0,0" VerticalAlignment="Top" Width="335">
+                Height="335" Margin="145,42,0,0" VerticalAlignment="Top" Width="335" MouseLeave="Canvas1_MouseLeave" MouseMove="Canvas1_MouseMove">
             <Canvas.Background>
                 <ImageBrush ImageSource="p1.png"/>
             </Canvas.Background>
@@ -32,7 +32,7 @@
             </Canvas.Background>
         </Canvas>
         <StackPanel HorizontalAlignment="Left" Height="6993" Margin="1245,-6947,-44832,0" VerticalAlignment="Top" Width="45097"/>
-        <Button Content="&lt;绕Z轴旋转 1°" HorizontalAlignment="Left" Margin="225,15,0,0" VerticalAlignment="Top" Width="103" RenderTransformOrigin="-0.427,-0.526" Click="Button_Click"/>
+        <Button Content="&lt;绕Z轴旋转 1°" HorizontalAlignment="Left" Margin="145,15,0,0" VerticalAlignment="Top" Width="103" RenderTransformOrigin="-0.427,-0.526" Click="Button_Click"/>
         <Button Content="&gt; 绕Z轴旋转 1°" HorizontalAlignment="Left" Margin="354,15,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="-0.427,-0.526" Click="Button_Click_1"/>
         <Button Content="&gt; 绕X轴旋转 1°" HorizontalAlignment="Left" Margin="603,15,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.427,-0.526" Click="Button_Click_5"/>
         <Button Content="&lt;绕Y轴旋转 1°" HorizontalAlignment="Right" Margin="0,21,433,0" VerticalAlignment="Top" Width="76" RenderTransformOrigin="-0.427,-0.526" Click="Button_Click_6"/>

@@ -62,6 +62,7 @@
     <Compile Include="hd.xaml.cs">
       <DependentUpon>hd.xaml</DependentUpon>
     </Compile>
+    <Compile Include="StdLine.cs" />
     <Compile Include="VectorHelper.cs" />
     <Page Include="hd.xaml">
       <SubType>Designer</SubType>

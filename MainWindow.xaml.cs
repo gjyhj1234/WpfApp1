@@ -36,19 +36,59 @@ namespace WpfApp1
 
         private void makeStdPlanes()
         {
-            int start = 2;
-            int pre = 4;
+            float start = 1.5F;
+            int pre = 3;
             stdPlane = vector.MakeParallelXZ(start);
-            stdPlanes.Clear();
-            for (int i = 5; i > -6; i--)
-            {
-                stdPlanes.Add(vector.MakeParallePlaneByOtherPlane(stdPlane, start + i * pre));
-            }
+            createotherLines(start, pre);
         }
 
+        private void createotherLines(float start, float pre)
+        {
+            clearELL(TLEll);
+            clearELL(TREll);
+            clearELL(BLEll);
+            clearELL(BREll);
+            stdPlanes.Clear();
+            for (int i = 5; i > 0; i--)
+            {
+                stdPlanes.Add(vector.MakeParallePlaneByOtherPlane(stdPlane,   i * pre));
+            }
+            stdPlanes.Add(stdPlane);
+            for (int i = 1; i < 6; i++)
+            {
+                stdPlanes.Add(vector.MakeParallePlaneByOtherPlane(stdPlane,  - i * pre));
+            }
+        }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var ag = -(float)Math.PI / 180F * 1F;
+            var qu = Quaternion.CreateFromYawPitchRoll(0, 0, ag);
+            var d = stdPlane.D;
+            stdPlane = Plane.Transform(Plane.Normalize(stdPlane), qu);
+            stdPlane = new Plane(stdPlane.Normal, d);
+            createotherLines(0, 3);
+            DrawLinesXY();
+            //plane =  Plane.Transform(Plane.Normalize(plane), qu);
+            //plane = new Plane(plane.Normal, d);
+
+            //plane2 = new Plane(plane.Normal, d + 20);
+            //reDrawPlanes();
+        }
+        Ellipse TLEll = null;
+        Ellipse TREll = null;
+        Ellipse BLEll = null;
+        Ellipse BREll = null;
+        private void clearELL(Ellipse ell)
+        {
+            if (ell != null)
+            {
+                Canvas1.Children.Remove(ell);
+                ell = null;
+            }
+        }
         private void DrawLinesXY()
         {
-            float ex1 = 0, ey1 = 0, ex2 = 0, ey2 = 0;
+            float ex1 = 0, ey1 = 0, ex2 = 0, ey2 = 0,k = 0,b = 0;
             while (uIElements1.Count > 0)
             {
                 Canvas1.Children.Remove(uIElements1[0]);
@@ -56,12 +96,153 @@ namespace WpfApp1
             }
             foreach (var pl in stdPlanes)
             {
-                var ele = drawPlaneCrossXY(pl, ref ex1, ref ey1, ref ex2, ref ey2);
+                var ele = drawPlaneCrossXY(pl, ref ex1, ref ey1, ref ex2, ref ey2,ref k,ref b);
                 if (ele != null)
+                {
+                    if (pl == stdPlanes[0])
+                    {
+                        var line = ele.Tag as StdLine;
+                        TLEll = CreateEll(ele.X1, ele.Y1, line.x1,line.y1,1);
+                        TREll = CreateEll(ele.X2, ele.Y2, line.x2, line.y2,2);
+                    }
+                    if (pl == stdPlanes[stdPlanes.Count - 1])
+                    {
+                        var line = ele.Tag as StdLine;
+                        BLEll = CreateEll(ele.X1, ele.Y1, line.x1, line.y1,3);
+                        BREll = CreateEll(ele.X2, ele.Y2, line.x2, line.y2,4);
+                    }
                     uIElements1.Add(ele);
+                }
+            }
+            Canvas1AddELL(TLEll);
+            Canvas1AddELL(TREll);
+            Canvas1AddELL(BLEll);
+            Canvas1AddELL(BREll);
+        }
+        private Ellipse CreateEll(double x,double y,float orgx, float orgy,int pos )
+        {
+            var ell = new Ellipse();
+            ell.Width = 6;
+            ell.Height = 6;
+            ell.Tag = new StdPoint { x1 = orgx, y1 = orgy,pos = pos };
+            ell.Fill = Brushes.Blue;
+            ell.SetValue(Canvas.LeftProperty, x - 3);
+            ell.SetValue(Canvas.TopProperty, y - 3);
+            makeevent(ell);
+            return ell;
+        }
+        private void Canvas1AddELL(Ellipse ell)
+        {
+            if (ell != null)
+                Canvas1.Children.Add(ell);
+        }
+        private void makeevent(Ellipse ell)
+        {
+            ell.MouseLeftButtonDown += Ell_MouseLeftButtonDown;
+            ell.MouseLeftButtonUp += Ell_MouseLeftButtonUp;
+        }
+        
+        Ellipse CurrentELL = null;
+        private void Ell_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var ell = sender as Ellipse;
+            ell.Fill = Brushes.Blue;
+            if(CurrentELL!=null)
+                CurrentELL.Fill = Brushes.Blue;
+            CurrentELL = null;
+        }
+        private void Window_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (CurrentELL != null)
+                CurrentELL.Fill = Brushes.Blue;
+            CurrentELL = null;
+        }
+        private void Ell_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var ell = sender as Ellipse;
+            ell.Fill = Brushes.GreenYellow;
+            CurrentELL = ell;
+        }
+        private void Canvas1_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (CurrentELL != null)
+            {
+                CurrentELL.Fill = Brushes.Blue;
+            }
+            CurrentELL = null;
+        }
+        private void Canvas1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (CurrentELL != null)
+            {
+                var std = CurrentELL.Tag as StdPoint;
+                if (std.x1 != 0)
+                {
+                    var sin0 = std.y1 / std.x1;
+                    var jds =  Math.Asin(sin0);
+                    if (double.IsNaN(jds))
+                        return;
+                    var p = e.GetPosition(Canvas1);
+                    var x2 = p.X - Canvas1.Width / 2;
+                    var y2 =   Canvas1.Height / 2 - p.Y ;
+                    if (x2 != 0)
+                    {
+                        var jde = Math.Asin(y2 / x2);
+                        if (jde != jds && !double.IsNaN(jde))
+                        {
+                            int pos = std.pos;
+                            var ag = -(float) (Math.PI / 180F * ( -jde + jds));
+                            var qu = Quaternion.CreateFromYawPitchRoll(0, 0, ag);
+                            var d = stdPlane.D;
+                            stdPlane = Plane.Transform(Plane.Normalize(stdPlane), qu);
+                            if (float.IsNaN(stdPlane.Normal.X) || float.IsNaN(stdPlane.Normal.Y) || float.IsNaN(stdPlane.Normal.Z))
+                            {
+                                var dddd = 1;
+                            }
+                            stdPlane = new Plane(stdPlane.Normal, d);
+                            createotherLines(0, 3);
+                            DrawLinesXY();
+                            switch (pos)
+                            {
+                                case 1:
+                                    CurrentELL = TLEll;
+                                    break;
+                                case 2:
+                                    CurrentELL = TREll;
+                                    break;
+                                case 3:
+                                    CurrentELL = BLEll;
+                                    break;
+                                case 4:
+                                    CurrentELL = BREll;
+                                    break;
+                            }
+                            CurrentELL.Fill = Brushes.GreenYellow;
+                        }
+                    }
+                }
+              
             }
         }
-
+        private void getnewpoint2(float k,float b,float L,Point curPoint,ref Point p1,ref Point p2)
+        {
+            double A = Math.Pow(k, 2) + 1;// A=k^2+1;
+            double B = 2 * ((b - curPoint.Y) * k - curPoint.X);// B=2[(b-y0)k-x0];
+            // C=(b-y0)^2+x0^2-L^2
+            double C = Math.Pow(b - curPoint.Y, 2) + Math.Pow(curPoint.X, 2)
+                    - Math.Pow(L, 2);
+            // 两根x1,x2= [-B±√(B^2-4AC)]/2A
+            if (A == 0)
+            {
+                var aaaa = 1;
+            }
+            double x1 = (-B + Math.Sqrt(Math.Pow(B, 2) - 4 * A * C)) / (2 * A);
+            double x2 = (-B - Math.Sqrt(Math.Pow(B, 2) - 4 * A * C)) / (2 * A);
+            double y1 = k * x1 + b;
+            double y2 = k * x2 + b;
+            p1 = new Point(x1, y1);
+            p2 = new Point(x2, y2);
+        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -112,10 +293,10 @@ namespace WpfApp1
 
             clearlines();
 
-            float ez1 = 0, ex1 = 0, ez2 =0 , ex2 = 0,ey1 = 0,ey2 = 0;
-            float fz1 = 0, fx1 = 0, fz2 = 0, fx2 = 0, fy1 = 0, fy2 = 0;
-            var e1 = drawPlaneCrossXY(plane,ref ex1,ref ey1,ref ex2,ref ey2);
-            var e2 = drawPlaneCrossXY(plane2, ref fx1, ref fy1, ref fx2, ref fy2);
+            float ez1 = 0, ex1 = 0, ez2 =0 , ex2 = 0,ey1 = 0,ey2 = 0,ek = 0, eb = 0;
+            float fz1 = 0, fx1 = 0, fz2 = 0, fx2 = 0, fy1 = 0, fy2 = 0, fk = 0, fb = 0;
+            var e1 = drawPlaneCrossXY(plane,ref ex1,ref ey1,ref ex2,ref ey2,ref ek,ref eb);
+            var e2 = drawPlaneCrossXY(plane2, ref fx1, ref fy1, ref fx2, ref fy2,ref fk,ref fb);
 
             if (e1 != null)
             {
@@ -149,8 +330,10 @@ namespace WpfApp1
         /// 画一条平面与xy平面的交线
         /// </summary>
         /// <param name="plane"></param>
-        private UIElement drawPlaneCrossXY(Plane plane,ref float x1, ref float y1, ref float x2, ref float y2)
+        private Line drawPlaneCrossXY(Plane plane, ref float x1, ref float y1, ref float x2, ref float y2, ref float k, ref float b, float len  =180)
         {
+            if (float.IsNaN(plane.Normal.X) || float.IsNaN(plane.Normal.Y) || float.IsNaN(plane.Normal.Z))
+                return null;
             Vector3 point = new Vector3(0, 0, 0);
             if (vector.CheckHasLine(plane, planexy, out Vector3 vector3, ref point))
             {
@@ -158,23 +341,29 @@ namespace WpfApp1
                 //A、B都为0
                 if (plane.Normal.Y == 0 && plane.Normal.X == 0)
                 {
-                    x1 = -500;
-                    x2 = 500;
+                    x1 = -len / 2;
+                    x2 = len / 2;
                     y1 = y2 = 0;
+                    k = 0;
+                    b = 0;
                 }
                 //A = 0、B!=0
                 else if (plane.Normal.Y != 0 && plane.Normal.X == 0)
                 {
-                    x1 = -500;
-                    x2 = 500;
+                    x1 = -len / 2;
+                    x2 = len / 2;
                     y2 = y1 = -plane.D / plane.Normal.Y;
+                    k = 0;
+                    b = y2;
                 }
                 //A != 0、B = 0
                 else if (plane.Normal.Y == 0 && plane.Normal.X != 0)
                 {
-                    y1 = -500;
-                    y2 = 500;
+                    y1 = -len / 2;
+                    y2 = len / 2;
                     x2 = x1 = -plane.D / plane.Normal.X;
+                    k = x2;
+                    b = 0;
                 }
                 //A != 0、B != 0
                 else
@@ -184,14 +373,33 @@ namespace WpfApp1
 
                     y2 = 0;
                     x2 = -plane.D / plane.Normal.X;
+                    if (x1 == x2)
+                    {
 
-                    float k = (y1 - y2) / (x1 - x2);
-                    float b = y1 - k * x1;
-                    x1 = -500;
+                        var aaa = 1;
+                    }
+                    k = (y1 - y2) / (x1 - x2);
+                    if (float.IsNaN(k))
+                    {
+                        var aaa = 1;
+                    }
+                    b = y1 - k * x1;
+
+                    Point p1 = new Point();
+                    Point p2 = new Point();
+                    getnewpoint2(k, b, len / 2, new Point(0, 0),ref p1,ref p2);
+
+                    x1 = (float)p1.X;
                     y1 = k * x1 + b;
-                    x2 = 500;
+                    x2 = (float)p2.X;
                     y2 = k * x2 + b;
+
+                    //x1 = -500;
+                    //y1 = k * x1 + b;
+                    //x2 = 500;
+                    //y2 = k * x2 + b;
                 }
+
                 return drawline(x1, y1, x2, y2, Canvas1, Brushes.Red);
             }
             return null;
@@ -335,10 +543,11 @@ namespace WpfApp1
             //myLine.VerticalAlignment = VerticalAlignment.Center;
             canvas.Children.Add(myLine);
         }
+        
         List<UIElement> uIElements1 = new List<UIElement>();
         List<UIElement> uIElements2 = new List<UIElement>();
         List<UIElement> uIElements3 = new List<UIElement>();
-        private UIElement drawline(float ix1, float iy1, float ix2, float iy2,Canvas canvas, System.Windows.Media.Brush brushes)
+        private Line drawline(float ix1, float iy1, float ix2, float iy2,Canvas canvas, System.Windows.Media.Brush brushes)
         {
             //将坐标系原点移到中心
             var y1 = canvas.Height / 2 -  iy1;
@@ -351,22 +560,15 @@ namespace WpfApp1
             myLine.Y1 = y1;
             myLine.X2 = x2;
             myLine.Y2 = y2;
+            StdLine stdLine = new StdLine { x1 = ix1, x2 = ix2, y1 = iy1, y2 = iy2 };
+            myLine.Tag = stdLine;
             //myLine.HorizontalAlignment = HorizontalAlignment.Left;
             //myLine.VerticalAlignment = VerticalAlignment.Center;
             canvas.Children.Add(myLine);
             return myLine;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var ag = - (float)Math.PI / 180F * 1F;
-            var qu = Quaternion.CreateFromYawPitchRoll(0, 0, ag);
-            var d = plane.D;
-            plane =  Plane.Transform(Plane.Normalize(plane), qu);
-            plane = new Plane(plane.Normal, d);
-            plane2 = new Plane(plane.Normal, d + 20);
-            reDrawPlanes();
-        }
+        
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
@@ -451,5 +653,7 @@ namespace WpfApp1
            
 
         }
+
+        
     }
 }
